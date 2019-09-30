@@ -1,5 +1,5 @@
 // Requirements of model Category //
-const mongoose = require('mongoose');
+const mongoose = require('../database')
 
 const CategorySchema = new mongoose.Schema({
   name: {
