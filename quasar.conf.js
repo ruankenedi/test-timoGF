@@ -33,20 +33,50 @@ module.exports = function (ctx) {
       // iconSet: 'ionicons-v4', // Quasar icon set
       // lang: 'de', // Quasar language pack
 
-      // Possible values for "all":
-      // * 'auto' - Auto-import needed Quasar components & directives
-      //            (slightly higher compile time; next to minimum bundle size; most convenient)
-      // * false  - Manually specify what to import
-      //            (fastest compile time; minimum bundle size; most tedious)
-      // * true   - Import everything from Quasar
-      //            (not treeshaking Quasar; biggest bundle size; convenient)
+      components: [
+        'QLayout',
+        'QField',
+        'QHeader',
+        'QCard',
+        'QCardSection',
+        'QDrawer',
+        'QForm',
+        'QPageContainer',
+        'QPage',
+        'QTable',
+        'QTh',
+        'QTr',
+        'QTd',
+        'QToolbar',
+        'QToolbarTitle',
+        'QBtn',
+        'QIcon',
+        'QList',
+        'QItem',
+        'QItemSection',
+        'QItemLabel',
+        'QInput',
+        'QScrollArea',
+        'QSelect',
+        'QKnob',
+        'QSeparator',
+        'QPopupEdit',
+        'QSpace',
+        'QExpansionItem',
+        'QPopupProxy',
+        'QBanner',
+        'QDialog'
+      ],
       all: 'auto',
 
       components: [],
       directives: [],
 
       // Quasar plugins
-      plugins: []
+      plugins: [
+        'Notify'
+      ]
+
     },
 
     // https://quasar.dev/quasar-cli/cli-documentation/supporting-ie
