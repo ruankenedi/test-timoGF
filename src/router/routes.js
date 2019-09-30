@@ -4,7 +4,26 @@ const routes = [
     path: '/',
     component: () => import('layouts/MyLayout.vue'),
     children: [
-      { path: '', component: () => import('pages/Index.vue') }
+      {
+        path: '/createCategory',
+        name: 'createCategory',
+        component: () => import('pages/CreateCategory.vue')
+      },
+      {
+        path: '/settingsCategory',
+        name: 'settingsCategory',
+        component: () => import('pages/SettingsCategory.vue')
+      },
+      {
+        path: '/createProduct',
+        name: 'createProduct',
+        component: () => import('pages/CreateProduct.vue')
+      },
+      {
+        path: '/settingsProduct',
+        name: 'settingsProduct',
+        component: () => import('pages/SettingsProduct.vue')
+      }
     ]
   }
 ]
