@@ -48,26 +48,24 @@
         :label="`Descrição do Produto: ${[n]}`"
         lazy-rules
         :rules="[
-          val => val && val.length >= 2 || 'O nome da produto deve ter pelo menos 2 caracteres!'
+          val => val && val.length >= 5 || 'A descrição do produto deve ter pelo menos 5 caracteres!'
         ]"
         @input="(event) => _emitChange({ inputValue: event, index: n })"
       />
 
        <q-input
-        filled
-        v-model="value[n]"
-        :label="`Valor do Produto: ${[n]}`"
-        prefix="R$"
-        maxlength="10"
-        mask="#.###.##"
-        fill-mask="0"
-        reverse-fill-mask
-        lazy-rules
-        :rules="[
-          val => val && val.length >= 2 || 'O nome da produto deve ter pelo menos 2 caracteres!'
-        ]"
-        @input="(event) => _emitChange({ inputValue: event, index: n })"
-      />
+          type="number"
+          filled
+          v-model="value[n]"
+          :label="`Valor do Produto: ${[n]}`"
+          prefix="R$"
+          maxlength="10"
+          lazy-rules
+          :rules="[
+            val => val && val > 0 || 'O valor do produto deve ser maior que 0 reais! E todos caracteres tem que ser números.'
+          ]"
+          @input="(event) => _emitChange({ inputValue: event, index: n })"
+        />
 
       <q-select
         class="q-mt-md q-mr-sm"
@@ -125,7 +123,7 @@ export default {
       description: [],
       value: [],
       modelSelect: [],
-      otherSelect: [],
+      receiveData: [],
       optionsSelect: [],
       index: 0,
       infoDialog: false,
@@ -177,7 +175,6 @@ export default {
         this.value[this.index],
         this.modelSelect
       ]
-      console.log('HERE PIVA THE CATEGORY: ', category)
 
       axios.post(url, {
         name,
@@ -210,8 +207,8 @@ export default {
         .then(response => {
           console.log('CREATED: ', response)
 
-          this.otherSelect = response.data
-          this.optionsSelect = this.otherSelect.map(categories => {
+          this.receiveData = response.data
+          this.optionsSelect = this.receiveData.map(categories => {
             return {
               label: categories.name,
               value: categories._id
@@ -251,7 +248,7 @@ export default {
         this.product[this.index] === '' ||
         this.product[this.index].length <= 1 ||
         this.description[this.index] === '' ||
-        this.description[this.index].length <= 1 ||
+        this.description[this.index].length <= 4 ||
         this.value[this.index] === '' ||
         this.value[this.index].length <= 1 ||
         this.modelSelect[this.index] === undefined ||
