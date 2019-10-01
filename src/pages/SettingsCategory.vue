@@ -3,7 +3,6 @@
     class="q-pa-md"
   >
     <q-table
-      title="Treats"
       :data="data"
       :columns="columns"
       row-key="name"
@@ -78,22 +77,30 @@
 
         <q-card-section>
           <q-input
+            label="Nome da categoria:"
             v-model="editCategory"
             autofocus
             @keyup.enter="prompt = false"
+            lazy-rules
+            :rules="[
+              val => val && val.length >= 2 || 'O nome da categoria deve ter pelo menos 2 caracteres!'
+            ]"
           />
         </q-card-section>
 
         <q-card-actions
-          align="right"
+          align="center"
           class="text-primary"
         >
           <q-btn
             label="Cancelar"
+            color="primary"
             v-close-popup
           />
           <q-btn
+            :disable="isValid"
             label="Editar"
+            color="primary"
             @click="edit()"
             v-close-popup
           />
@@ -109,20 +116,16 @@
         <q-card-section
           class="row items-center"
         >
-          <q-avatar
-            icon="signal_wifi_off"
-            color="primary"
-            text-color="white"
-          />
           <span
             class="q-ml-sm"
+            align="center"
           >
             Deseja realmente excluir esta categoria ?
           </span>
         </q-card-section>
 
         <q-card-actions
-          align="right"
+          align="center"
         >
           <q-btn
             label="Não"
@@ -180,6 +183,8 @@ export default {
         .catch(err => {
           console.log('Error ao edit the category! ', err)
         })
+
+      this.editCategory = ''
     },
     remove () { // Method for delete category //
       const url = `http://localhost:3000/auth/deleteCategory/${this.dataTable}`
@@ -215,6 +220,18 @@ export default {
         .finally(() => {
           this.isLoadingCategory = false
         })
+    }
+  },
+  computed: {
+    isValid () { // Field Validation //
+      if (
+        this.editCategory.length < 2 ||
+        this.category === ''
+      ) {
+        return true
+      }
+
+      return false
     }
   },
   created () {
