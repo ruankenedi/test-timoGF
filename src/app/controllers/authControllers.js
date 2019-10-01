@@ -5,7 +5,7 @@ const router = express.Router()
 const mongoose = require('mongoose')
 
 //////////////////////// BEGIN CATEGORY ////////////////////////
-router.post('/category', async (req, res) => {
+router.post('/category', async (req, res) => { // create category //
   const { name } = req.body
 
   try {
@@ -30,7 +30,7 @@ router.post('/category', async (req, res) => {
   }
 })
 
-router.get('/categories', async (req, res) => {
+router.get('/categories', async (req, res) => { // Search categories //
   Category.find({}, (err, category) => {
     if (err) {
       return res.send({ error: 'Search failed!' })
@@ -40,7 +40,7 @@ router.get('/categories', async (req, res) => {
   })
 })
 
-router.put('/editCategory/:id', async (req, res) => {
+router.put('/editCategory/:id', async (req, res) => { // Edit category //
   const { name } = req.body
 
   try {
@@ -57,7 +57,7 @@ router.put('/editCategory/:id', async (req, res) => {
   }
 })
 
-router.delete('/deleteCategory/:id', async (req, res) => {
+router.delete('/deleteCategory/:id', async (req, res) => { // Delete category //
   const { name } = req.body
 
   try {
@@ -76,106 +76,92 @@ router.delete('/deleteCategory/:id', async (req, res) => {
 //////////////////////// END CATEGORY ////////////////////////
 
 //////////////////////// BEGIN PRODUCT ////////////////////////
-router.post('/product', async (req, res) => {
+router.post('/product', async (req, res) => { // Create product //
   const { name, description, value, category } = req.body;
 
-  let categories = []
+  let _categories = []
 
   try {
-    categories = await Category.find({
+    _categories = await Category.find({
       '_id': {
         $in: [
-          ...category.map(subjectId => mongoose.Types.ObjectId(subjectId))
+          ...category.map(categoryId => mongoose.Types.ObjectId(categoryId))
         ]
       }
     });
   } catch (_) {
-    res.status(400).send({ error: 'Disciplinas não encontradas' })
+    res.send({ error: 'Categories not found!' })
 
     return
   }
 
+///////************************POPULATE */
   try {
-    if (categories.length === category.length) {
-      const courseInstance = await Course.create({
+    if (_categories.length === category.length) {
+      const productInstance = await Product.create({
         name,
         description,
         value,
-        categories
+        category
       })
 
       res.status(200).send({
         success: true,
-        data: courseInstance
+        data: productInstance
       });
     }
   } catch (err) {
     console.log({ err });
-    res.status(400).send({ erro: 'Erro ao criar curso' })
+    res.send({ erro: 'Error ao create categories!' })
   }
-  // const { name, description, value, category } = req.body
-  // console.log(category)
-
-  // let _categories = []
-
-  // try {
-  //   _categories = await Category.find({
-  //     '_id': {
-  //       $in: [
-  //         category
-  //       ]
-  //     }
-  //   });
-  // } catch (_) {
-  //   res.send({ error: 'Categories not found!' })
-
-  //   return
-  // }
-
-  // try {
-  //   if (_categories.length === category.length) {
-  //     const productInstance = await Product.create({
-  //       name,
-  //       description,
-  //       value,
-  //       category
-  //     })
-  //     console.log('PRODUCT CREATED!')
-
-  //     res.status(200).send({
-  //       success: true,
-  //       data: productInstance
-  //     });
-  //   }
-  // } catch (err) {
-  //   console.log({ err });
-  //   res.send({ erro: 'Error ao create product' })
-  // }
-
-  // try {
-  //   if (await Product.findOne({ name })) {
-  //     console.log('Product already exists!')
-  //     return res.send({ error: 'Product already exists!' })
-  //   }
-
-  //   const productInstance = await Product.create({
-  //     name,
-  //     description,
-  //     value
-  //   })
-  //   console.log('PRODUCT CREATED!')
-
-  //   return res.send({
-  //     success: true,
-  //     data: productInstance
-  //   })
-
-  // } catch (error) {
-  //   console.log('Register Failed!')
-  //   return res.send({ error: 'Register Failed!' })
-
-  // }
 })
+
+router.get('/products', async (req, res) => { // Search products //
+  Product.find({}, (err, product) => {
+    if (err) {
+      return res.send({ error: 'Search failed!' })
+    }
+
+    res.send(product)
+  })
+})
+
+router.put('/editProduct/:id', async (req, res) => { // Edit product //
+  const { name, description, value, category } = req.body
+
+  try {
+    const productInstance = await Product.findByIdAndUpdate(req.params.id, { $set: req.body })
+    console.log(producInstance);
+
+    console.log('UPDATED!')
+
+    return res.send({
+      success: true,
+      data: productInstance
+    })
+  } catch (error) {
+    console.log('Updated Failed!')
+    return res.send({ error: 'Updated Failed!' })
+  }
+})
+
+// router.delete('/deleteProduct/:id', async (req, res) => { // Delete product //
+//   const { name, description, value, category } = req.body
+
+//   try {
+//     const productInstance = await Product.findByIdAndDelete(req.params.id, { $set: req.body })
+//     console.log('DELETE!')
+
+//     return res.send({
+//       success: true,
+//       data: productInstance
+//     })
+//   } catch (error) {
+//     console.log('Updated Failed!')
+//     return res.send({ error: 'Updated Failed!' })
+//   }
+// })
+
 //////////////////////// END PRODUCT ////////////////////////
 
 
