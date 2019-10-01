@@ -146,7 +146,7 @@ export default {
         index: index
       })
     },
-    _emitRemove (index) {
+    _emitRemove (index) { // Method for emit event when any fields is removed //
       console.log(index)
 
       this.$emit('onRemoveInput', {
@@ -155,12 +155,10 @@ export default {
     }
   },
   computed: {
-    // Remove field //
-    canRemoveInput () {
+    canRemoveInput () { // Remove field //
       return this.index === 0
     },
-    isValid () {
-      // Field Validation //
+    isValid () { // Field Validation //
       if (
         this.index === 0 ||
         this.category[this.index] === '' ||
@@ -174,7 +172,3 @@ export default {
   }
 }
 </script>
-
-<style>
-
-</style>
