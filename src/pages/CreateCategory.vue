@@ -116,7 +116,6 @@ export default {
     },
     async createCategory () { // Method for creating of categorys //
       const url = 'http://localhost:3000/auth/category'
-
       const [ name ] = [ this.category[this.index] ]
 
       axios.post(url, {
