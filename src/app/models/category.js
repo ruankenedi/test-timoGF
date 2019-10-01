@@ -10,8 +10,8 @@ const CategorySchema = new mongoose.Schema({
     type: Date,
     default: Date.now
   }
-});
+})
 
-const Category = mongoose.model('Category', CategorySchema);
+const Category = mongoose.model('Category', CategorySchema)
 
-module.exports = Category;
+module.exports = Category

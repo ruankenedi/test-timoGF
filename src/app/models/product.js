@@ -1,4 +1,5 @@
-const mongoose = require('mongoose');
+// Requirements of model Product //
+const mongoose = require('../database')
 
 const ProductSchema = new mongoose.Schema({
   name: {
@@ -14,15 +15,15 @@ const ProductSchema = new mongoose.Schema({
     require: true
   },
   category: {
-    type: [mongoose.Schema.Types.String], // code no reliable //
+    type: [mongoose.Schema.Types.ObjectId], // code no reliable //
     require: true
   },
   createdAt: {
     type: Date,
     default: Date.now
   }
-});
+})
 
-const Product = mongoose.model('Product', ProductSchema);
+const Product = mongoose.model('Product', ProductSchema)
 
-module.exports = Product;
+module.exports = Product
