@@ -23,17 +23,22 @@ const routes = [
         path: '/settingsProduct',
         name: 'settingsProduct',
         component: () => import('pages/SettingsProduct.vue')
+      },
+      {
+        path: '/calcInstalments',
+        name: 'calcInstalments',
+        component: () => import('pages/CalcInstalments.vue')
       }
     ]
   }
 ]
 
-// Always leave this as last one
-if (process.env.MODE !== 'ssr') {
-  routes.push({
-    path: '*',
-    component: () => import('pages/Error404.vue')
-  })
-}
+// // Always leave this as last one
+// if (process.env.MODE !== 'ssr') {
+//   routes.push({
+//     path: '*',
+//     component: () => import('pages/Error404.vue')
+//   })
+// }
 
 export default routes
