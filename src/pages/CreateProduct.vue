@@ -14,7 +14,7 @@
       />
       <q-btn
         class="col-4"
-        label="Cadastrar Categoria"
+        label="Cadastrar Produto"
         :disable="isValid"
         @click="submit"
       />
@@ -57,6 +57,11 @@
         filled
         v-model="value[n]"
         :label="`Valor do Produto: ${[n]}`"
+        prefix="R$"
+        maxlength="10"
+        mask="#.###.##"
+        fill-mask="0"
+        reverse-fill-mask
         lazy-rules
         :rules="[
           val => val && val.length >= 2 || 'O nome da produto deve ter pelo menos 2 caracteres!'
@@ -120,6 +125,7 @@ export default {
       description: [],
       value: [],
       modelSelect: [],
+      otherSelect: [],
       optionsSelect: [],
       index: 0,
       infoDialog: false,
@@ -143,6 +149,7 @@ export default {
     less () { // Method for decrease field //
       if (this.index > 0) {
         this.product[this.index] = undefined
+        this.modelSelect[this.index] = undefined
 
         --this.index
       }
@@ -156,16 +163,27 @@ export default {
     submit () {
       this.createProduct()
     },
-    async createProduct () { // Method for creating of categorys //
+    async createProduct () { // Method for creating of categories //
       const url = 'http://localhost:3000/auth/product'
 
-      const [ name, description, value, category ] = [ this.product[this.index], this.description[this.index], this.value[this.index], this.modelSelect[this.index] ]
+      const [
+        name,
+        description,
+        value,
+        category
+      ] = [
+        this.product[this.index],
+        this.description[this.index],
+        this.value[this.index],
+        this.modelSelect
+      ]
+      console.log('HERE PIVA THE CATEGORY: ', category)
 
       axios.post(url, {
         name,
         description,
         value,
-        category: category.value
+        category: [...category.filter(val => val).map(category => category.value)]
       })
         .then(res => {
           console.log('Success to creating product: ', res)
@@ -182,6 +200,7 @@ export default {
 
       this.index = 0
       this.product[this.index] = ''
+      this.modelSelect[this.index] = ''
     },
     loadCategories () {
       const url = 'http://localhost:3000/auth/categories'
@@ -191,8 +210,8 @@ export default {
         .then(response => {
           console.log('CREATED: ', response)
 
-          this.modelSelect = response.data
-          this.optionsSelect = this.modelSelect.map(categories => {
+          this.otherSelect = response.data
+          this.optionsSelect = this.otherSelect.map(categories => {
             return {
               label: categories.name,
               value: categories._id
@@ -214,7 +233,7 @@ export default {
         index: index
       })
     },
-    _emitRemove (index) {
+    _emitRemove (index) { // Method for emit event when any fields is removed //
       console.log(index)
 
       this.$emit('onRemoveInput', {
@@ -223,12 +242,10 @@ export default {
     }
   },
   computed: {
-    // Remove field //
-    canRemoveInput () {
+    canRemoveInput () { // Remove field //
       return this.index === 0
     },
-    isValid () {
-      // Field Validation //
+    isValid () { // Field Validation //
       if (
         this.index === 0 ||
         this.product[this.index] === '' ||
@@ -236,7 +253,9 @@ export default {
         this.description[this.index] === '' ||
         this.description[this.index].length <= 1 ||
         this.value[this.index] === '' ||
-        this.value[this.index].length <= 1
+        this.value[this.index].length <= 1 ||
+        this.modelSelect[this.index] === undefined ||
+        this.modelSelect[this.index].length === null
       ) {
         return true
       }
