@@ -65,7 +65,7 @@
         <div
           class="col-2 q-table__title"
         >
-          Categorias
+          Produtos
         </div>
 
         <q-space />
@@ -223,7 +223,7 @@ export default {
       columns: [
         { name: 'name', align: 'left', label: 'Produto', field: 'name', sortable: true },
         { name: 'description', align: 'left', label: 'Descrição', field: 'description', sortable: true },
-        { name: 'value', align: 'left', label: 'Valor', field: 'value', sortable: true },
+        { name: 'value', align: 'left', label: 'Valor em R$', field: 'value', sortable: true },
         { name: 'category', align: 'left', label: 'Categoria', field: 'category', sortable: true },
         { name: 'Ações', label: 'Ações', field: 'Ações', sortable: true, style: 'width: 10px' }
       ],
@@ -327,8 +327,7 @@ export default {
     }
   },
   computed: {
-    isValid () {
-      // Field Validation //
+    isValid () { // Field Validation //
       if (
         this.editName.length < 2 ||
         this.editDescription.length < 5 ||
