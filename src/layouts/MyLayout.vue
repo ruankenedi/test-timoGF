@@ -16,12 +16,9 @@
         />
 
         <q-toolbar-title>
-          Quasar App
+          Timo - GF
         </q-toolbar-title>
 
-        <div>
-          Quasar v{{ $q.version }}
-        </div>
       </q-toolbar>
     </q-header>
 
@@ -105,27 +102,27 @@
 
         </q-expansion-item>
 
-        <!-- <q-expansion-item
+        <q-expansion-item
           :content-inset-level="0.5"
           expand-separator
           icon="mail"
-          label="Usuários"
+          label="Cálculos"
           caption="5 opções"
         >
           <q-expansion-item
             :content-inset-level="0.5"
             expand-separator
             icon="settings"
-            label="Gerenciar Usuários"
-            :to="{ name: 'settingsUser' }"
+            label="Cálculos das Parcelas"
+            :to="{ name: 'calcInstalments' }"
           >
             <q-card>
               <q-card-section>
-                Editar, excluir e administração das permissões e dos status!
+                Definições de valores para as parcelas!
               </q-card-section>
             </q-card>
           </q-expansion-item>
-        </q-expansion-item> -->
+        </q-expansion-item>
       </q-list>
     </q-drawer>
 
