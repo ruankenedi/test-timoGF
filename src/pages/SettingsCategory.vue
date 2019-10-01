@@ -1,27 +1,54 @@
 <template>
-  <div class="q-pa-md">
+  <div
+    class="q-pa-md"
+  >
     <q-table
       title="Treats"
       :data="data"
       :columns="columns"
       row-key="name"
     >
-      <template v-slot:body="props">
-        <q-tr :props="props" @click.native="() => showEditModal(props)" style="cursor: pointer;">
-          <q-td key="name" :props="props">
+      <template
+        v-slot:body="props"
+      >
+        <q-tr
+          :props="props"
+          @click.native="() => showEditModal(props)"
+          style="cursor: pointer;"
+        >
+          <q-td
+            key="name"
+            :props="props"
+          >
             {{ props.row.name }}
           </q-td>
           <q-td>
-            <q-btn round color="primary" icon="edit" @click="infoDialog = true"/>
+            <q-btn
+              round
+              color="primary"
+              icon="edit"
+              @click="infoDialog = true"
+            />
           </q-td>
            <q-td>
-            <q-btn round color="primary" icon="delete" @click="confirmDialog = true" />
+            <q-btn
+              round
+              color="primary"
+              icon="delete"
+              @click="confirmDialog = true"
+            />
           </q-td>
         </q-tr>
       </template>
 
-      <template v-slot:top="props">
-        <div class="col-2 q-table__title">Cursos</div>
+      <template
+        v-slot:top="props"
+      >
+        <div
+          class="col-2 q-table__title"
+        >
+          Categorias
+        </div>
 
         <q-space />
 
@@ -38,32 +65,76 @@
     <q-dialog
       v-model="infoDialog"
     >
-      <q-card style="min-width: 400px">
+      <q-card
+        style="min-width: 400px;"
+      >
         <q-card-section>
-          <div class="text-h6">Your address</div>
+          <div
+            class="text-h6"
+          >
+            Edite a categoria...
+          </div>
         </q-card-section>
 
         <q-card-section>
-          <q-input dense v-model="editCategory" autofocus @keyup.enter="prompt = false" />
+          <q-input
+            v-model="editCategory"
+            autofocus
+            @keyup.enter="prompt = false"
+          />
         </q-card-section>
 
-        <q-card-actions align="right" class="text-primary">
-          <q-btn flat label="Cancelar" v-close-popup />
-          <q-btn flat label="Editar" @click="edit()" v-close-popup />
+        <q-card-actions
+          align="right"
+          class="text-primary"
+        >
+          <q-btn
+            label="Cancelar"
+            v-close-popup
+          />
+          <q-btn
+            label="Editar"
+            @click="edit()"
+            v-close-popup
+          />
         </q-card-actions>
       </q-card>
     </q-dialog>
 
-    <q-dialog v-model="confirmDialog" persistent>
+    <q-dialog
+      v-model="confirmDialog"
+      persistent
+    >
       <q-card>
-        <q-card-section class="row items-center">
-          <q-avatar icon="signal_wifi_off" color="primary" text-color="white" />
-          <span class="q-ml-sm">Deseja realmente excluir esta categoria ?</span>
+        <q-card-section
+          class="row items-center"
+        >
+          <q-avatar
+            icon="signal_wifi_off"
+            color="primary"
+            text-color="white"
+          />
+          <span
+            class="q-ml-sm"
+          >
+            Deseja realmente excluir esta categoria ?
+          </span>
         </q-card-section>
 
-        <q-card-actions align="right">
-          <q-btn label="Não" color="primary" v-close-popup />
-          <q-btn label="Sim" color="primary" v-close-popup @click="remove()" />
+        <q-card-actions
+          align="right"
+        >
+          <q-btn
+            label="Não"
+            color="primary"
+            v-close-popup
+          />
+          <q-btn
+            label="Sim"
+            color="primary"
+            v-close-popup
+            @click="remove()"
+          />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -78,14 +149,12 @@ export default {
   name: 'SettingsCategory',
   data () {
     return {
-      isLoadingCourses: false,
+      isLoadingCategory: false,
       category: [],
-      optionsCourse: [],
       editCategory: '',
       dataTable: '',
       infoDialog: false,
       confirmDialog: false,
-      status: '',
       columns: [
         { name: 'name', align: 'left', label: 'Nome da Categoria', field: 'name', sortable: true },
         { name: 'Ações', label: 'Ações', field: 'Ações', sortable: true, style: 'width: 10px' }
@@ -112,7 +181,7 @@ export default {
           console.log('Error ao edit the category! ', err)
         })
     },
-    remove () { // Method for editing of category //
+    remove () { // Method for delete category //
       const url = `http://localhost:3000/auth/deleteCategory/${this.dataTable}`
       const name = this.editCategory
 
@@ -126,9 +195,9 @@ export default {
           console.log('Error ao edit the category! ', err)
         })
     },
-    loadCourses () {
+    loadCategory () {
       const url = 'http://localhost:3000/auth/categories'
-      this.isLoadingCourses = true
+      this.isLoadingCategory = true
 
       axios.get(url)
         .then(response => {
@@ -144,16 +213,12 @@ export default {
           console.log(error)
         })
         .finally(() => {
-          this.isLoadingCourses = false
+          this.isLoadingCategory = false
         })
     }
   },
   created () {
-    this.loadCourses()
+    this.loadCategory()
   }
 }
 </script>
-
-<style>
-
-</style>
