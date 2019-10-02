@@ -9,11 +9,6 @@ router.post('/category', async (req, res) => { // create category //
   const { name } = req.body
 
   try {
-    if (await Category.findOne({ name })) {
-      console.log('Category already exists!')
-      return res.send({ error: 'Category already exists!' })
-    }
-
     const categoryInstance = await Category.create({
       name
     })
@@ -41,8 +36,6 @@ router.get('/categories', async (req, res) => { // Search categories //
 })
 
 router.put('/editCategory/:id', async (req, res) => { // Edit category //
-  const { name } = req.body
-
   try {
     const categoryInstance = await Category.findByIdAndUpdate(req.params.id, { $set: req.body })
     console.log('UPDATED!')
@@ -58,8 +51,6 @@ router.put('/editCategory/:id', async (req, res) => { // Edit category //
 })
 
 router.delete('/deleteCategory/:id', async (req, res) => { // Delete category //
-  const { name } = req.body
-
   try {
     const categoryInstance = await Category.findByIdAndDelete(req.params.id, { $set: req.body })
     console.log('DELETE!')
@@ -78,7 +69,6 @@ router.delete('/deleteCategory/:id', async (req, res) => { // Delete category //
 //////////////////////// BEGIN PRODUCT ////////////////////////
 router.post('/product', async (req, res) => { // Create product //
   const { name, description, value, category } = req.body;
-
   let _categories = []
 
   try {
@@ -95,14 +85,13 @@ router.post('/product', async (req, res) => { // Create product //
     return
   }
 
-///////************************POPULATE */
   try {
     if (_categories.length === category.length) {
       const productInstance = await Product.create({
         name,
         description,
         value,
-        category
+        category: _categories.map(cat => cat.name).toString()
       })
 
       res.status(200).send({
@@ -127,12 +116,8 @@ router.get('/products', async (req, res) => { // Search products //
 })
 
 router.put('/editProduct/:id', async (req, res) => { // Edit product //
-  const { name, description, value, category } = req.body
-
   try {
     const productInstance = await Product.findByIdAndUpdate(req.params.id, { $set: req.body })
-    console.log(producInstance);
-
     console.log('UPDATED!')
 
     return res.send({
@@ -145,24 +130,21 @@ router.put('/editProduct/:id', async (req, res) => { // Edit product //
   }
 })
 
-// router.delete('/deleteProduct/:id', async (req, res) => { // Delete product //
-//   const { name, description, value, category } = req.body
+router.delete('/deleteProduct/:id', async (req, res) => { // Delete product //
+  try {
+    const productInstance = await Product.findByIdAndDelete(req.params.id, { $set: req.body })
+    console.log('DELETE!')
 
-//   try {
-//     const productInstance = await Product.findByIdAndDelete(req.params.id, { $set: req.body })
-//     console.log('DELETE!')
-
-//     return res.send({
-//       success: true,
-//       data: productInstance
-//     })
-//   } catch (error) {
-//     console.log('Updated Failed!')
-//     return res.send({ error: 'Updated Failed!' })
-//   }
-// })
+    return res.send({
+      success: true,
+      data: productInstance
+    })
+  } catch (error) {
+    console.log('Updated Failed!')
+    return res.send({ error: 'Updated Failed!' })
+  }
+})
 
 //////////////////////// END PRODUCT ////////////////////////
 
-
-module.exports = app => app.use('/auth', router);
+module.exports = app => app.use('/auth', router)
