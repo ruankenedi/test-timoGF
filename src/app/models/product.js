@@ -15,7 +15,7 @@ const ProductSchema = new mongoose.Schema({
     require: true
   },
   category: {
-    type: [mongoose.Schema.Types.ObjectId], // code no reliable //
+    type: String, // code no reliable //
     require: true
   },
   createdAt: {
