@@ -33,7 +33,7 @@
       >
         <q-expansion-item
           expand-separator
-          icon="mail"
+          icon="category"
           label="Categorias"
           caption="2 opções"
         >
@@ -68,7 +68,7 @@
 
         <q-expansion-item
           expand-separator
-          icon="mail"
+          icon="filter_frames"
           label="Produtos"
           caption="2 opções"
         >
@@ -99,18 +99,16 @@
               </q-card-section>
             </q-card>
           </q-expansion-item>
-
         </q-expansion-item>
 
         <q-expansion-item
-          :content-inset-level="0.5"
           expand-separator
-          icon="mail"
+          icon="rate_review"
           label="Cálculos"
-          caption="5 opções"
+          caption="1 opções"
         >
           <q-expansion-item
-            :content-inset-level="0.5"
+            :header-inset-level="1"
             expand-separator
             icon="settings"
             label="Cálculos das Parcelas"
