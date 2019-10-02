@@ -330,7 +330,7 @@ export default {
               name: product.name,
               description: product.description,
               value: product.value,
-              category: product.category
+              category: this.optionsSelect.map(cat => cat.label).toString()
             }
           })
         })
@@ -357,8 +357,8 @@ export default {
     }
   },
   created () { // One cycle life of vue, what get the products and categories of database like this what accessed //
-    this.loadProduct()
     this.loadCategories()
+    this.loadProduct()
   }
 }
 </script>
