@@ -117,21 +117,18 @@
           <q-input
             label="Valor do Produto"
             v-model="editValue"
-            maxlength="10"
-            prefix="R$"
-            mask="#.###.##"
-            fill-mask="0"
+            mask="###.##"
             reverse-fill-mask
+            maxlength="6"
+            prefix="R$"
             @keyup.enter="prompt = false"
             lazy-rules
             :rules="[
-              val => val && val !== null || 'O valor do produto deve ser maior que 0!'
+              val => val && val > 0 || 'O valor do produto deve ser maior que 0 reais! E todos caracteres tem que ser números.'
             ]"
           />
           <q-select
             label="Selecione uma categoria"
-            class="q-mt-md q-mr-sm"
-            filled
             v-model="editCategory"
             :options="optionsSelect"
             stack-label
@@ -143,14 +140,16 @@
         </q-card-section>
 
         <q-card-actions
-          align="right"
+          align="center"
           class="text-primary"
         >
           <q-btn
+            color="primary"
             label="Cancelar"
             v-close-popup
           />
           <q-btn
+            color="primary"
             label="Editar"
             :disable="isValid"
             @click="edit()"
@@ -231,12 +230,16 @@ export default {
     }
   },
   methods: {
-    showEditModal (row) {
+    showEditModal (row) { // Get data of row on table after that has clicked //
       console.log({ row })
-      this.dataTable = 'row.row.id'
-      console.log('hello: ', this.dataTable)
+      this.dataTable = row.row.id
+      this.editName = row.row.name
+      this.editDescription = row.row.description
+      this.editValue = row.row.value
+      this.editCategory = row.row.category
+      console.log('ççççççççççç: ', this.editCategory)
     },
-    edit () { // Method for editing of category //
+    edit () { // Method for editing of product //
       const url = `http://localhost:3000/auth/editProduct/${this.dataTable}`
       const name = this.editName
       const description = this.editDescription
@@ -244,12 +247,10 @@ export default {
       const category = this.editCategory
 
       axios.put(url, {
-        data: {
-          name,
-          description,
-          value,
-          category
-        }
+        name,
+        description,
+        value,
+        category: category.value
       })
         .then(response => {
           console.log('Edited with success! ', response)
@@ -257,9 +258,22 @@ export default {
         .catch(err => {
           console.log('Error ao edit the category! ', err)
         })
+
+      this.editName = ''
+      this.editDescription = ''
+      this.editValue = ''
+      this.editCategory = ''
+
+      this.$q.notify({
+        icon: 'done',
+        color: 'positive',
+        message: 'Produto editado com sucesso!'
+      })
+
+      location.reload()
     },
-    remove () { // Method for delete category //
-      const url = `http://localhost:3000/auth/deleteCategory/${this.dataTable}`
+    remove () { // Method for delete product //
+      const url = `http://localhost:3000/auth/deleteProduct/${this.dataTable}`
       const name = this.editName
       const description = this.editDescription
       const value = this.editValue
@@ -277,6 +291,8 @@ export default {
         .catch(err => {
           console.log('Error ao edit the category! ', err)
         })
+
+      location.reload()
     },
     loadCategories () { // Method for search categories //
       const url = 'http://localhost:3000/auth/categories'
@@ -340,7 +356,7 @@ export default {
       return false
     }
   },
-  created () {
+  created () { // One cycle life of vue, what get the products and categories of database like this what accessed //
     this.loadProduct()
     this.loadCategories()
   }
