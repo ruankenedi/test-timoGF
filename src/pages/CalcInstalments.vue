@@ -45,7 +45,7 @@
               round
               color="primary"
               icon="attach_money"
-              @click="calcInstalments()"
+              @click="openDialog()"
             />
           </q-td>
         </q-tr>
@@ -59,7 +59,7 @@
         >
           Produtos
           <br>
-          <span style="font-size: 9pt;">
+          <span style="font-size: 9pt; color: grey;">
             Arraste a table para a direita, assim você conseguirá fazer o cálculo.
           </span>
         </div>
@@ -108,11 +108,18 @@
             :disable="true"
           />
 
-           <q-input
+          <q-input
             label="Valor: *"
             v-model="value"
             prefix="R$"
             maxlength="10"
+            @keyup.enter="prompt = false"
+            :disable="true"
+          />
+
+          <q-input
+            label="Categoria do Produto: *"
+            v-model="category"
             @keyup.enter="prompt = false"
             :disable="true"
           />
@@ -138,13 +145,20 @@
           />
 
           <q-input
-            label="Juros: *"
-            v-model="interest"
+            label="Juros por mês: *"
+            v-model="interestForMonth"
             :disable="true"
             prefix="R$"
             @keyup.enter="prompt = false"
           />
 
+          <q-input
+            :label="`Juros total de ${instalments} ${instalments > 1 ? 'parcelas' : 'parcela' }: *`"
+            v-model="interestTotal"
+            :disable="true"
+            prefix="R$"
+            @keyup.enter="prompt = false"
+          />
         </q-card-section>
 
         <q-card-actions
@@ -152,10 +166,12 @@
           class="text-primary"
         >
           <q-btn
+            color="primary"
             label="Cancelar"
             v-close-popup
           />
           <q-btn
+            color="primary"
             label="Calcular"
             @click="calc()"
             :disable="isValid"
@@ -175,14 +191,15 @@ export default {
     return {
       isLoadingCategory: false,
       product: [],
-      input: [],
       name: '',
       description: '',
       receiveData: [],
       optionsSelect: [],
       value: '',
+      category: '',
       instalments: '',
-      interest: '',
+      interestForMonth: '',
+      interestTotal: '',
       valueInstalments: '',
       infoDialog: false,
       columns: [
@@ -196,20 +213,36 @@ export default {
     }
   },
   methods: {
-    showEditModal (row) {
-      console.log({ row })
+    showEditModal (row) { // Get data of row on table after that has clicked //
       this.name = row.row.name
       this.description = row.row.description
       this.value = row.row.value
+      this.category = row.row.category
     },
-    calcInstalments () {
+    openDialog () { // Open dialog to calculate instalments //
       this.infoDialog = true
     },
-    calc () {
+    calc () { // Calculate the values of instalments and interest too //
       const totalInstalments = parseFloat(this.value) / parseFloat(this.instalments)
       this.valueInstalments = totalInstalments.toFixed(2)
+      // switch (this.category) {
+      //   case 'Informática':
+      this.percentage = (5 * this.value) / 100
+      //     break
+      //   case 'Automotivo':
+      //     return 2.5
+      //     break
+      //   case 'Móveis':
+      //     return 1
+      //     break
+
+      //   default:
+      //     break
+      // }
+      this.interestForMonth = ((5 * this.value) / 100).toFixed(2)
+      this.interestTotal = this.instalments * this.interestForMonth
     },
-    loadCategories () {
+    loadCategories () { // Search categories on database //
       const url = 'http://localhost:3000/auth/categories'
       this.isLoadingCategories = true
 
@@ -232,7 +265,7 @@ export default {
           this.isLoadingCategories = false
         })
     },
-    loadProduct () {
+    loadProduct () { // Search products on database //
       const url = 'http://localhost:3000/auth/products'
       this.isLoadingCategory = true
 
@@ -269,7 +302,7 @@ export default {
       return false
     }
   },
-  created () {
+  created () { // One cycle life of vue, what get the products and categories of database like this what accessed //
     this.loadProduct()
     this.loadCategories()
   }
