@@ -46,7 +46,7 @@
       v-model="infoDialog"
     >
       <q-card
-        style="background-color: blue; color: white;"
+        style="color: grey;"
       >
         <q-card-section
           class="row items-center"

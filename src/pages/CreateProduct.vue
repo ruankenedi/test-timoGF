@@ -72,7 +72,7 @@
         :label="`Categoria: ${[n]}`"
         lazy-rules
         :rules="[
-          val => val && val.length !== 1 || 'Selecione pelo menos uma das categorias!'
+          val => val && val.length !== 1 || 'Selecione pelo menos uma das categorias! Nenhuma categoria cadastrada ? Crie e depois volte para cadastrar o produto.'
         ]"
       />
     </div>
@@ -81,7 +81,7 @@
       v-model="infoDialog"
     >
       <q-card
-        style="background-color: blue; color: white;"
+        style="color: grey;"
       >
         <q-card-section
           class="row items-center"
@@ -106,6 +106,51 @@
         </q-card-section>
       </q-card>
     </q-dialog>
+
+    <q-dialog
+      v-model="alertDialog"
+    >
+      <q-card
+        style="color: grey;"
+      >
+        <q-card-section
+          class="row items-center"
+        >
+          <div
+            class="text-h6"
+          >
+            Atenção
+          </div>
+          <q-space />
+          <q-btn
+            icon="close"
+            flat
+            round
+            dense
+            v-close-popup
+          />
+        </q-card-section>
+
+        <q-card-section>
+          Para você cadastrar produto, precisa adicionar pelo menos 1 categoria.
+          Até que esta situação não se resolva, os campos para cadastrar produto serão desabilitados. Obrigado!
+        </q-card-section>
+        <q-card-actions
+          align="right"
+        >
+          <q-btn
+            color="primary"
+            label="Fechar"
+            v-close-popup
+          />
+          <q-btn
+            color="primary"
+            label="Cadastrar Categoria"
+            @click="$router.push({ name: 'createCategory' })"
+          />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </q-page>
 </template>
 
@@ -121,6 +166,7 @@ export default {
       modelSelect: [],
       receiveData: [],
       optionsSelect: [],
+      alertDialog: false,
       index: 0,
       infoDialog: false,
       btnAdd: false
