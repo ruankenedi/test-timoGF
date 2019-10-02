@@ -105,7 +105,7 @@
           expand-separator
           icon="rate_review"
           label="Cálculos"
-          caption="1 opções"
+          caption="1 opção"
         >
           <q-expansion-item
             :header-inset-level="1"
