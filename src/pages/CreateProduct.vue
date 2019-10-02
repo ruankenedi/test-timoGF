@@ -32,7 +32,6 @@
       class="q-mt-md q-mr-sm"
     >
       <q-input
-        filled
         v-model="product[n]"
         :label="`Nome do Produto: ${[n]}`"
         lazy-rules
@@ -42,8 +41,7 @@
         @input="(event) => _emitChange({ inputValue: event, index: n })"
       />
 
-       <q-input
-        filled
+      <q-input
         v-model="description[n]"
         :label="`Descrição do Produto: ${[n]}`"
         lazy-rules
@@ -53,23 +51,21 @@
         @input="(event) => _emitChange({ inputValue: event, index: n })"
       />
 
-       <q-input
-          type="number"
-          filled
-          v-model="value[n]"
-          :label="`Valor do Produto: ${[n]}`"
-          prefix="R$"
-          maxlength="10"
-          lazy-rules
-          :rules="[
-            val => val && val > 0 || 'O valor do produto deve ser maior que 0 reais! E todos caracteres tem que ser números.'
-          ]"
-          @input="(event) => _emitChange({ inputValue: event, index: n })"
-        />
+      <q-input
+        v-model="value[n]"
+        :label="`Valor do Produto: ${[n]}`"
+        prefix="R$"
+        mask="###.##"
+        reverse-fill-mask
+        maxlength="6"
+        lazy-rules
+        :rules="[
+          val => val && val > 0 || 'O valor do produto deve ser maior que 0 reais! E todos caracteres tem que ser números.'
+        ]"
+        @input="(event) => _emitChange({ inputValue: event, index: n })"
+      />
 
       <q-select
-        class="q-mt-md q-mr-sm"
-        filled
         v-model="modelSelect[n]"
         :options="optionsSelect"
         stack-label
@@ -134,7 +130,7 @@ export default {
     add () { // Method for add field //
       ++this.index
 
-      if (this.index === 5) {
+      if (this.index === 2) {
         this.btnAdd = true
         this.infoDialog = true
       }
@@ -199,7 +195,7 @@ export default {
       this.product[this.index] = ''
       this.modelSelect[this.index] = ''
     },
-    loadCategories () {
+    loadCategories () { // Search categories on database //
       const url = 'http://localhost:3000/auth/categories'
       this.isLoadingCategories = true
 
@@ -251,6 +247,7 @@ export default {
         this.description[this.index].length <= 4 ||
         this.value[this.index] === '' ||
         this.value[this.index].length <= 1 ||
+        this.value[this.index].length > 10 ||
         this.modelSelect[this.index] === undefined ||
         this.modelSelect[this.index].length === null
       ) {
@@ -260,7 +257,7 @@ export default {
       return false
     }
   },
-  created () {
+  created () { // One cycle life of vue, what get the categories of database like this what accessed //
     this.loadCategories()
   }
 }
