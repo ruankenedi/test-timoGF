@@ -167,7 +167,7 @@
         >
           <q-btn
             color="primary"
-            label="Cancelar"
+            label="Fechar"
             v-close-popup
           />
           <q-btn
@@ -225,21 +225,21 @@ export default {
     calc () { // Calculate the values of instalments and interest too //
       const totalInstalments = parseFloat(this.value) / parseFloat(this.instalments)
       this.valueInstalments = totalInstalments.toFixed(2)
-      // switch (this.category) {
-      //   case 'Informática':
-      this.percentage = (5 * this.value) / 100
-      //     break
-      //   case 'Automotivo':
-      //     return 2.5
-      //     break
-      //   case 'Móveis':
-      //     return 1
-      //     break
+      switch (this.category) {
+        case 'Informática':
+          this.interestForMonth = ((5 * this.value) / 100).toFixed(2)
+          break
+        case 'Automotivo':
+          this.interestForMonth = ((2.5 * this.value) / 100).toFixed(2)
+          break
+        case 'Móveis':
+          this.interestForMonth = ((1 * this.value) / 100).toFixed(2)
+          break
 
-      //   default:
-      //     break
-      // }
-      this.interestForMonth = ((5 * this.value) / 100).toFixed(2)
+        default:
+          break
+      }
+
       this.interestTotal = this.instalments * this.interestForMonth
     },
     loadCategories () { // Search categories on database //
@@ -278,7 +278,7 @@ export default {
               name: product.name,
               description: product.description,
               value: product.value,
-              category: product.category
+              category: this.optionsSelect.map(cat => cat.label).toString()
             }
           })
         })
@@ -303,8 +303,8 @@ export default {
     }
   },
   created () { // One cycle life of vue, what get the products and categories of database like this what accessed //
-    this.loadProduct()
     this.loadCategories()
+    this.loadProduct()
   }
 }
 </script>
