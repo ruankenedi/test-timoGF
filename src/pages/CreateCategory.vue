@@ -32,7 +32,6 @@
       class="q-mt-md q-mr-sm"
     >
       <q-input
-        filled
         v-model="category[n]"
         :label="`Nome da Categoria: ${[n]}`"
         lazy-rules
