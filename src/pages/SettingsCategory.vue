@@ -166,8 +166,7 @@ export default {
     }
   },
   methods: {
-    showEditModal (row) {
-      console.log({ row })
+    showEditModal (row) { // Get data of row on table after that has clicked //
       this.dataTable = row.row.id
     },
     edit () { // Method for editing of category //
@@ -185,6 +184,8 @@ export default {
         })
 
       this.editCategory = ''
+
+      location.reload()
     },
     remove () { // Method for delete category //
       const url = `http://localhost:3000/auth/deleteCategory/${this.dataTable}`
@@ -199,6 +200,8 @@ export default {
         .catch(err => {
           console.log('Error ao edit the category! ', err)
         })
+
+      location.reload()
     },
     loadCategory () {
       const url = 'http://localhost:3000/auth/categories'
@@ -234,7 +237,7 @@ export default {
       return false
     }
   },
-  created () {
+  created () { // One cycle life of vue, what get the categories of database like this what accessed //
     this.loadCategory()
   }
 }
